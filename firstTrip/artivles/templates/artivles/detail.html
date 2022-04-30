@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}{{article.article_title}}{% endblock %}
+
+{% block content %}
+
+	<h2>{{article.article_title}}</h2>
+
+	<p>{{article.article_text}}</p>
+
+	<em>{{article.pup_date}}</em>
+
+	{% if article.was_published_recently %}
+	<p style="color: lime">НОВАЯ СТАТЬЯ!</p>
+	{% endif %}
+
+	<hr>
+
+	{% if latest_comment_list %}
+		{% for c in latest_comment_list %}
+			<div style="background: #505050">
+			<p style="margin-left: 10px">
+				<strong> {{c.Avtor_name}}:</strong>
+				<p style="margin-left: 15px"> {{c.comment_text}}</p>
+			</p>
+			</div>
+		{% endfor %}
+	{% else %}
+	Комментарии не найдены! Станьте первым!
+	{% endif %}
+	<hr>
+	<form action="{% url 'artivles:leave_comment' article.id %}" method="POST">
+		{% csrf_token %}
+		<input type="text" required placeholder="Ваше имя" name="name"><br>
+		<textarea name="text" required placeholder="Текст комментария" cols="70" rows="5"></textarea><br>
+		<button type="submit">Оставить комментарий</button>
+	</form>
+{% endblock %}

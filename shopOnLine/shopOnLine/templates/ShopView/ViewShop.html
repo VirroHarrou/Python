@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+{% block title %}{{product.product_title}}{% endblock %}
+        {% block style %}
+            <style>
+				.imgblock{
+					margin: 10px;
+					display: inline;
+					border-radius: 15px;
+				}
+				.exmpl {
+                overflow: hidden;
+                display: inline-flex;
+                justify-content: center;
+                align-items: center;
+            	}
+            	.exmpl img {
+                height: auto;
+                width: 100%;
+            	} 
+				.txtblock{
+				margin: 10px;
+                display: inline;
+                height: 90%;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                font-style: normal;
+                font-weight: 600;
+                font-size: 16px;
+                line-height: 32px;
+                text-align: left;
+                color: rgb(49, 49, 49);
+				}
+				.descblock{
+					background-color: yellowgreen;
+				}
+				.commentblock{
+					font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                font-style: normal;
+                font-weight: 600;
+                font-size: 16px;
+                line-height: 32px;
+                text-align: left;
+                color: rgb(49, 49, 49);
+				}
+				.btnsub{
+					background-color: yellowgreen;
+					border-radius: 5px;
+					border-color: black;
+				}
+            </style>
+        {% endblock %}
+{% block content %}
+	<div class="container">
+		<div class="row">
+			<div class="imgblock exmpl col-4">
+				<img src="{{product.product_picture.url}}" alt="Фото товара временно отсутсвует">
+			</div>
+			  	<div class="col txtblock">
+				<div class="row">
+				  	<div class="col">
+						<h3>{{product.product_title}}</h3>
+				    </div>
+				</div>
+				<hr style="color: rgb(0, 75, 4); height: 3px;">
+				<div class="row">
+				  	<div class="col">
+						<p>{{product.product_description}}</p>
+						{% if product.was_published_recently%}
+                        <p style="background-color: yellowgreen; width: 100px; text-align: center;" > Новинка!</p>
+                    {% endif %}
+			  		</div>
+					
+				</div>
+				<hr style="color: rgb(0, 75, 4); height: 3px;">
+				</div>
+		</div>
+		<div class="row descblock">
+			<div class="col">
+				<p>Характеристики</p>
+			</div>
+		</div>
+	</div>
+	<div class="container commentblock">
+		<p><strong>Комментарии</strong></p>
+		<hr>
+	{% if latest_comment_list %}
+		{% for c in latest_comment_list %}
+			<div class="row">
+				<strong> {{c.avtor_name}}</strong>
+			</div>
+			<div class="row">
+				<p><strong>Комментарий: </strong>{{c.comment_text}}</p>
+			</div>
+			<div class="row">
+				<p><strong>Достоинства: </strong>{{c.comment_text_positive}}</p>
+			</div>
+			<div class="row">
+				<p><strong>Недостатки: </strong>{{c.comment_text_negative}}</p>
+			</div>
+		{% endfor %}
+	{% else %}
+	<div class="row">
+		<p>Комментарии не найдены! Станьте первым!</p>
+	</div>
+	{% endif %}
+		<hr>
+	</div>
+	<div class="container">
+	  <form action="{% url 'shopOnLine:leave_comment' product.id %}" method="post">
+		{% csrf_token %}
+		<div class="mb-3">
+		  <input type="text" class="form-control" placeholder="Ваше имя" name="name" aria-describedby="emailHelp">
+		</div>
+		<div class="mb-3">
+			<textarea class="form-control" placeholder="Текст комментария" name="text" rows="3"></textarea>
+		</div>
+		<div class="mb-3">
+			<textarea class="form-control" placeholder="Достоинства" name="textP" rows="3"></textarea>
+		</div>
+		<div class="mb-3">
+			<textarea class="form-control" placeholder="Недостатки" name="textN" rows="3"></textarea>
+		</div>
+		<button type="submit" class="btn btn-primary btn-outline-dark" style="background-color: yellowgreen; border-color: black;">Оставить комментарий</button>
+	  </form>
+	</div>
+{% endblock %}

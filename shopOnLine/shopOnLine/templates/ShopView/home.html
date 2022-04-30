@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% block title %}Home{% endblock %}
+    {% block style %}
+        <style>
+            body{background-color: #FFF;}
+            a{text-decoration: none;}
+            .cont{
+                margin-top: 10px;
+                border: 1px solid gray;
+                box-sizing: border-box;
+                border-radius: 15px;
+                transition: 0.3s;
+            }
+            .cont:hover{
+                box-shadow: 2px 4px 8px 4px rgba(0, 0, 0, 0.25);
+                transition: 0.3s;
+            }
+            .txtparm{
+                margin: 10px;
+                display: inline;
+                height: 90%;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                font-style: normal;
+                font-weight: 600;
+                font-size: 16px;
+                line-height: 32px;
+                text-align: left;
+                color: rgb(49, 49, 49);
+            }
+            .exmpl {
+                overflow: hidden;
+                display: inline-flex;
+                justify-content: center;
+                align-items: center;
+            }
+            .exmpl img {
+                height: auto;
+                width: 90%;
+                margin: 10px;
+            } 
+        </style>
+    {% endblock %}
+    
+    {% block content %}
+
+        {% if lasted_products_list %}
+            <div class="container-xxl" style="padding: 50px;">
+            {% for a in lasted_products_list %}
+            <a href="{% url 'shopOnLine:detail' a.id %}">
+                <div class="row cont">
+                    <div class="col-4 exmpl">
+                        <img src="{{a.product_picture.url}}" alt="Фото товара временно отсутсвует">
+                    </div>
+                    <div class="col txtparm">
+                        <h5>{{a.product_title}}</h5>
+                        <hr>
+                        <p>{{a.product_description}}</p>
+                        {% if a.was_published_recently%}
+                            <p style="background-color: yellowgreen; width: 100px; text-align: center;" > Новинка!</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+            </div>
+        {% else %}
+        <div class="txtparm">
+            Товаров нет :-(
+        </div>
+        {% endif %}
+
+    {% endblock %}
